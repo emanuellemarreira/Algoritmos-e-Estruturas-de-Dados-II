@@ -21,6 +21,7 @@ public:
     Graph(unsigned int);
     ~Graph();
     void add_edge(vertex, vertex);
+    void remove_edge(vertex, vertex);
     list<T> get_adj(vertex v){ return adj[v]; }
     unsigned int get_num_vertices(){return num_vertices;}
     unsigned int get_num_edges(){return num_edges;}
@@ -39,8 +40,9 @@ Graph<T>::~Graph(){
     adj = nullptr;
     num_edges =0;
     num_vertices = 0;
-    cout << "\nbye graph\n";
+    //cout << "\nbye graph\n";
 }
+
 template<typename T>
 void Graph<T>::add_edge(vertex u, vertex v){
     ItemVertex item_vertex_v{v};
@@ -49,6 +51,26 @@ void Graph<T>::add_edge(vertex u, vertex v){
     adj[v].push_back(item_vertex_u);//como nao é direcionado tem que fazer esse vice-versa
     num_edges++;
 }
+
+template<typename T>
+void Graph<T>::remove_edge(vertex u, vertex v){
+    ItemVertex item_vertex_v{v};
+    ItemVertex item_vertex_u{u};
+    list<ItemVertex> &lista_u = adj[u];
+    for( auto itr = lista_u.begin(); itr!= lista_u.end(); ++itr){
+        if(itr->value == item_vertex_v.value){
+            itr = lista_u.erase( itr );
+        }
+    }
+    list<ItemVertex> &lista_v = adj[v];
+    for( auto itr2 = lista_v.begin(); itr2!= lista_v.end(); ++itr2){
+        if(itr2->value == item_vertex_u.value){
+            itr2 = lista_v.erase( itr2 );
+        }
+    }
+    num_edges--;
+}
+
 template <typename T>
 void input_graph(Graph<T> &g, unsigned int num_edges){
     vertex u = 0;
@@ -77,10 +99,13 @@ int main(){
     unsigned int num_vertices = 0;
     unsigned int num_edges = 0;
     cin>> num_vertices >> num_edges;
-    cout << "numero de vertices: "<< num_vertices <<endl;
-    cout << "numero de edges: "<< num_edges <<endl;
+    //cout << "numero de vertices: "<< num_vertices <<endl;
+    //cout << "numero de edges: "<< num_edges <<endl;
     Graph<ItemVertex> g{num_vertices};
     input_graph(g, num_edges);
+    display_graph(g);
+    g.remove_edge(2,3);
+    cout<<"removendo..."<<endl;
     display_graph(g);
     return 0;
 }
