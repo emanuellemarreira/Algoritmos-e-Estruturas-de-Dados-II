@@ -62,13 +62,13 @@ void Graph<T>::remove_edge(vertex u, vertex v){
     VertexWeightPair item_vertex_u{u};
     list<VertexWeightPair> &lista_u = adj[u];
     for( auto itr = lista_u.begin(); itr!= lista_u.end(); ++itr){
-        if(itr->value == item_vertex_v.value){
+        if(itr->vertice == item_vertex_v.vertice){
             itr = lista_u.erase( itr );
         }
     }
     list<VertexWeightPair> &lista_v = adj[v];
     for( auto itr2 = lista_v.begin(); itr2!= lista_v.end(); ++itr2){
-        if(itr2->value == item_vertex_u.value){
+        if(itr2->vertice == item_vertex_u.vertice){
             itr2 = lista_v.erase( itr2 );
         }
     }
@@ -80,7 +80,7 @@ void input_graph(Graph<T> &g, unsigned int num_edges){
     vertex u = 0;
     vertex v = 0;
     weight peso = 0;
-    for(int i = 0; i<num_edges; ++i){
+    for(unsigned int i = 0; i < num_edges; ++i){
         cin >> u >> v >> peso;
         g.add_edge(u, v, peso);
     }
@@ -88,13 +88,13 @@ void input_graph(Graph<T> &g, unsigned int num_edges){
 template <typename T>
 void display_list(list<T> &lst) {
 	for (auto item_vertex : lst) {
-		cout << item_vertex.value << ", ";
+		cout << "(" << item_vertex.vertice << ", " << item_vertex.peso << "),";
 	}
 	cout << endl;
 }
 template <typename T>
 void display_graph(Graph<T> &g){
-    for(int v = 0; v < g.get_num_vertices(); v++){
+    for(unsigned int v = 0; v < g.get_num_vertices(); v++){
         cout << "v[" << v << "]: ";
 		list<T> lst = g.get_adj(v);
 		display_list( lst );
@@ -104,6 +104,8 @@ int main(){
     unsigned int num_vertices = 0;
     unsigned int num_edges = 0;
     cin>> num_vertices >> num_edges;
+    cout << "num_vertices: "<< num_vertices <<endl;
+    cout << "num_edges: "<< num_edges <<endl;
     Graph<VertexWeightPair> g{num_vertices};
     input_graph(g, num_edges);
     display_graph(g);

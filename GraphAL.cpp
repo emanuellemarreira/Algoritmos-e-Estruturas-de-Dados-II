@@ -104,8 +104,8 @@ int main(){
     Graph<ItemVertex> g{num_vertices};
     input_graph(g, num_edges);
     display_graph(g);
-    g.remove_edge(2,3);
-    cout<<"removendo..."<<endl;
-    display_graph(g);
+    //g.remove_edge(2,3);
+    //cout<<"removendo..."<<endl;
+    //display_graph(g);
     return 0;
 }
