@@ -3,6 +3,9 @@
 #include <list>
 using namespace std;
 
+// Implementação de um grafo ponderado 
+// utilizando lista de adjacência
+
 typedef unsigned int Vertex;
 typedef float Weight;
 
