@@ -55,10 +55,36 @@ GraphAL<T>::~GraphAL()
 template <typename T>
 void GraphAL<T>::add_edge(Vertex u, Vertex v)
 {
+    int jaexiste = 0;
     ItemVertex item_Vertex_v{v};
-    adj[u].push_back(item_Vertex_v);
     ItemVertex item_Vertex_u{u};
-    adj[v].push_back(item_Vertex_u);
+    list<ItemVertex> &lista_u = adj[u];
+    for (auto itr = lista_u.begin(); itr != lista_u.end(); ++itr)
+    {
+        if (itr->value == item_Vertex_v.value)
+        {
+            jaexiste = 1;
+        }
+    }
+    if (jaexiste == 0)
+    {
+        adj[u].push_back(item_Vertex_v);
+    }
+
+    jaexiste = 0;
+
+    list<ItemVertex> &lista_v = adj[v];
+    for (auto itr2 = lista_v.begin(); itr2 != lista_v.end(); ++itr2)
+    {
+        if (itr2->value == item_Vertex_u.value)
+        {
+            jaexiste = 1;
+        }
+    }
+    if (jaexiste == 0)
+    {
+        adj[v].push_back(item_Vertex_u);
+    }
     num_edges++;
 }
 

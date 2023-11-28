@@ -15,6 +15,7 @@ public:
     Vertex vertex;
     Weight weight;
     VertexWeightPair() {}
+    VertexWeightPair(Vertex vertex) : vertex(vertex), weight(0.0f){};
     VertexWeightPair(Vertex vertex, Weight weight) : vertex(vertex), weight(weight){};
 };
 
@@ -129,8 +130,8 @@ int main()
     WeightedGraphAL<VertexWeightPair> g{num_vertices};
     input_WeightedGraphAL(g, num_edges);
     display_WeightedGraphAL(g);
-    // g.remove_edge(2,3);
-    // cout<<"removendo..."<<endl;
-    // display_WeightedGraphAL(g);
+    g.remove_edge(2,3);
+    cout<<"removendo..."<<endl;
+    display_WeightedGraphAL(g);
     return 0;
 }
