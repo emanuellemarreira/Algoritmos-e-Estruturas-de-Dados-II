@@ -4,11 +4,15 @@
 using namespace std;
 
 typedef unsigned int vertex;
-class ItemVertex{
+typedef unsigned int weight;
+
+class VertexWeightPair{
 public: 
-    unsigned int value;
-    ItemVertex(){}
-    ItemVertex(unsigned int value): value(value){};
+    vertex vertice;
+    weight peso;
+    VertexWeightPair(){}
+    VertexWeightPair(vertex vertice, weight peso): vertice(vertice), peso(peso){};
+
 };
 
 template<typename T>
@@ -16,20 +20,20 @@ class Graph{
 private:
     unsigned int num_vertices;
     unsigned int num_edges;
-    list<T> *adj; //pra alocar dinamicamente
+    list<T> *adj; 
 public:
     Graph(unsigned int);
     ~Graph();
-    void add_edge(vertex, vertex);
+    void add_edge(vertex, vertex, weight);
     void remove_edge(vertex, vertex);
-    list<T> get_adj(vertex v){ return adj[v]; }
     unsigned int get_num_vertices(){return num_vertices;}
     unsigned int get_num_edges(){return num_edges;}
+    list<T> get_adj(vertex v){ return adj[v]; }
 };
 
 template<typename T>
 Graph<T>::Graph(unsigned int num_vertices): num_vertices(num_vertices){
-    adj = new list<ItemVertex>[num_vertices];
+    adj = new list<VertexWeightPair>[num_vertices];
 }
 template<typename T>
 Graph<T>::~Graph(){
@@ -44,25 +48,25 @@ Graph<T>::~Graph(){
 }
 
 template<typename T>
-void Graph<T>::add_edge(vertex u, vertex v){
-    ItemVertex item_vertex_v{v};
+void Graph<T>::add_edge(vertex u, vertex v, weight peso){
+    VertexWeightPair item_vertex_v{v, peso};
     adj[u].push_back(item_vertex_v);
-    ItemVertex item_vertex_u{u};
+    VertexWeightPair item_vertex_u{u, peso};
     adj[v].push_back(item_vertex_u);//como nao é direcionado tem que fazer esse vice-versa
     num_edges++;
 }
 
 template<typename T>
 void Graph<T>::remove_edge(vertex u, vertex v){
-    ItemVertex item_vertex_v{v};
-    ItemVertex item_vertex_u{u};
-    list<ItemVertex> &lista_u = adj[u];
+    VertexWeightPair item_vertex_v{v};
+    VertexWeightPair item_vertex_u{u};
+    list<VertexWeightPair> &lista_u = adj[u];
     for( auto itr = lista_u.begin(); itr!= lista_u.end(); ++itr){
         if(itr->value == item_vertex_v.value){
             itr = lista_u.erase( itr );
         }
     }
-    list<ItemVertex> &lista_v = adj[v];
+    list<VertexWeightPair> &lista_v = adj[v];
     for( auto itr2 = lista_v.begin(); itr2!= lista_v.end(); ++itr2){
         if(itr2->value == item_vertex_u.value){
             itr2 = lista_v.erase( itr2 );
@@ -75,9 +79,10 @@ template <typename T>
 void input_graph(Graph<T> &g, unsigned int num_edges){
     vertex u = 0;
     vertex v = 0;
+    weight peso = 0;
     for(int i = 0; i<num_edges; ++i){
-        cin >> u >> v;
-        g.add_edge(u, v);
+        cin >> u >> v >> peso;
+        g.add_edge(u, v, peso);
     }
 }
 template <typename T>
@@ -99,13 +104,11 @@ int main(){
     unsigned int num_vertices = 0;
     unsigned int num_edges = 0;
     cin>> num_vertices >> num_edges;
-    cout << "num_vertices: "<< num_vertices <<endl;
-    cout << "num_edges: "<< num_edges <<endl;
-    Graph<ItemVertex> g{num_vertices};
+    Graph<VertexWeightPair> g{num_vertices};
     input_graph(g, num_edges);
     display_graph(g);
-    g.remove_edge(2,3);
-    cout<<"removendo..."<<endl;
-    display_graph(g);
+    //g.remove_edge(2,3);
+    //cout<<"removendo..."<<endl;
+    //display_graph(g);
     return 0;
 }
