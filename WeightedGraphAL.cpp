@@ -4,7 +4,7 @@
 using namespace std;
 
 typedef unsigned int vertex;
-typedef unsigned int weight;
+typedef float weight;
 
 class VertexWeightPair{
 public: 
@@ -88,7 +88,7 @@ void input_graph(Graph<T> &g, unsigned int num_edges){
 template <typename T>
 void display_list(list<T> &lst) {
 	for (auto item_vertex : lst) {
-		cout << "(" << item_vertex.vertice << ", " << item_vertex.peso << "),";
+		cout << "(" << item_vertex.vertice << ", " << item_vertex.peso << "), ";
 	}
 	cout << endl;
 }

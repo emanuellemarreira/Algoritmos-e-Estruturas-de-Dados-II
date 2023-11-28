@@ -3,7 +3,7 @@
 #include <list>
 using namespace std;
 
-typedef unsigned int vertex;
+typedef unsigned int Vertex;
 class ItemVertex{
 public: 
     unsigned int value;
@@ -20,9 +20,9 @@ private:
 public:
     Graph(unsigned int);
     ~Graph();
-    void add_edge(vertex, vertex);
-    void remove_edge(vertex, vertex);
-    list<T> get_adj(vertex v){ return adj[v]; }
+    void add_edge(Vertex, Vertex);
+    void remove_edge(Vertex, Vertex);
+    list<T> get_adj(Vertex v){ return adj[v]; }
     unsigned int get_num_vertices(){return num_vertices;}
     unsigned int get_num_edges(){return num_edges;}
 };
@@ -44,27 +44,27 @@ Graph<T>::~Graph(){
 }
 
 template<typename T>
-void Graph<T>::add_edge(vertex u, vertex v){
-    ItemVertex item_vertex_v{v};
-    adj[u].push_back(item_vertex_v);
-    ItemVertex item_vertex_u{u};
-    adj[v].push_back(item_vertex_u);//como nao é direcionado tem que fazer esse vice-versa
+void Graph<T>::add_edge(Vertex u, Vertex v){
+    ItemVertex item_Vertex_v{v};
+    adj[u].push_back(item_Vertex_v);
+    ItemVertex item_Vertex_u{u};
+    adj[v].push_back(item_Vertex_u);//como nao é direcionado tem que fazer esse vice-versa
     num_edges++;
 }
 
 template<typename T>
-void Graph<T>::remove_edge(vertex u, vertex v){
-    ItemVertex item_vertex_v{v};
-    ItemVertex item_vertex_u{u};
+void Graph<T>::remove_edge(Vertex u, Vertex v){
+    ItemVertex item_Vertex_v{v};
+    ItemVertex item_Vertex_u{u};
     list<ItemVertex> &lista_u = adj[u];
     for( auto itr = lista_u.begin(); itr!= lista_u.end(); ++itr){
-        if(itr->value == item_vertex_v.value){
+        if(itr->value == item_Vertex_v.value){
             itr = lista_u.erase( itr );
         }
     }
     list<ItemVertex> &lista_v = adj[v];
     for( auto itr2 = lista_v.begin(); itr2!= lista_v.end(); ++itr2){
-        if(itr2->value == item_vertex_u.value){
+        if(itr2->value == item_Vertex_u.value){
             itr2 = lista_v.erase( itr2 );
         }
     }
@@ -73,23 +73,23 @@ void Graph<T>::remove_edge(vertex u, vertex v){
 
 template <typename T>
 void input_graph(Graph<T> &g, unsigned int num_edges){
-    vertex u = 0;
-    vertex v = 0;
-    for(int i = 0; i<num_edges; ++i){
+    Vertex u = 0;
+    Vertex v = 0;
+    for(unsigned int i = 0; i<num_edges; ++i){
         cin >> u >> v;
         g.add_edge(u, v);
     }
 }
 template <typename T>
 void display_list(list<T> &lst) {
-	for (auto item_vertex : lst) {
-		cout << item_vertex.value << ", ";
+	for (auto item_Vertex : lst) {
+		cout << item_Vertex.value << ", ";
 	}
 	cout << endl;
 }
 template <typename T>
 void display_graph(Graph<T> &g){
-    for(int v = 0; v < g.get_num_vertices(); v++){
+    for(unsigned int v = 0; v < g.get_num_vertices(); v++){
         cout << "v[" << v << "]: ";
 		list<T> lst = g.get_adj(v);
 		display_list( lst );
