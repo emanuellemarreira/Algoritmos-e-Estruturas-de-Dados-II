@@ -3,6 +3,9 @@
 #include <list>
 using namespace std;
 
+// Implementação de um Grafo 
+// utilizando lista de adjacência
+
 typedef unsigned int Vertex;
 class ItemVertex
 {

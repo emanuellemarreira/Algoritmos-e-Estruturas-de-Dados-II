@@ -3,114 +3,131 @@
 #include <list>
 using namespace std;
 
-typedef unsigned int vertex;
-typedef float weight;
+typedef unsigned int Vertex;
+typedef float Weight;
 
-class VertexWeightPair{
-public: 
-    vertex vertice;
-    weight peso;
-    VertexWeightPair(){}
-    VertexWeightPair(vertex vertice, weight peso): vertice(vertice), peso(peso){};
-
+class VertexWeightPair
+{
+public:
+    Vertex vertex;
+    Weight weight;
+    VertexWeightPair() {}
+    VertexWeightPair(Vertex vertex, Weight weight) : vertex(vertex), weight(weight){};
 };
 
-template<typename T>
-class Graph{
+template <typename T>
+class WeightedGraphAL
+{
 private:
     unsigned int num_vertices;
     unsigned int num_edges;
-    list<T> *adj; 
+    list<T> *adj;
+
 public:
-    Graph(unsigned int);
-    ~Graph();
-    void add_edge(vertex, vertex, weight);
-    void remove_edge(vertex, vertex);
-    unsigned int get_num_vertices(){return num_vertices;}
-    unsigned int get_num_edges(){return num_edges;}
-    list<T> get_adj(vertex v){ return adj[v]; }
+    WeightedGraphAL(unsigned int);
+    ~WeightedGraphAL();
+    void add_edge(Vertex, Vertex, Weight);
+    void remove_edge(Vertex, Vertex);
+    unsigned int get_num_vertices() { return num_vertices; }
+    unsigned int get_num_edges() { return num_edges; }
+    list<T> get_adj(Vertex v) { return adj[v]; }
 };
 
-template<typename T>
-Graph<T>::Graph(unsigned int num_vertices): num_vertices(num_vertices){
-    adj = new list<VertexWeightPair>[num_vertices];
+template <typename T>
+WeightedGraphAL<T>::WeightedGraphAL(unsigned int num_vertices) : num_vertices(num_vertices)
+{
+    adj = new list <VertexWeightPair> [ num_vertices ];
 }
-template<typename T>
-Graph<T>::~Graph(){
-    for (unsigned int u = 0; u < num_vertices; ++u){
-        adj[u].clear(); //pega uma lista que ta na posicao i e apaga usando clear pq adj é uma list
+template <typename T>
+WeightedGraphAL<T>::~WeightedGraphAL()
+{
+    for (unsigned int u = 0; u < num_vertices; ++u)
+    {
+        adj[u].clear();
     }
-    delete[] adj; //como adj é uma list
+    delete[] adj;
     adj = nullptr;
-    num_edges =0;
+    num_edges = 0;
     num_vertices = 0;
-    //cout << "\nbye graph\n";
 }
 
-template<typename T>
-void Graph<T>::add_edge(vertex u, vertex v, weight peso){
-    VertexWeightPair item_vertex_v{v, peso};
-    adj[u].push_back(item_vertex_v);
-    VertexWeightPair item_vertex_u{u, peso};
-    adj[v].push_back(item_vertex_u);//como nao é direcionado tem que fazer esse vice-versa
+template <typename T>
+void WeightedGraphAL<T>::add_edge(Vertex u, Vertex v, Weight weight)
+{
+    VertexWeightPair item_Vertex_v{v, weight};
+    adj[u].push_back(item_Vertex_v);
+    VertexWeightPair item_Vertex_u{u, weight};
+    adj[v].push_back(item_Vertex_u);
     num_edges++;
 }
 
-template<typename T>
-void Graph<T>::remove_edge(vertex u, vertex v){
-    VertexWeightPair item_vertex_v{v};
-    VertexWeightPair item_vertex_u{u};
+template <typename T>
+void WeightedGraphAL<T>::remove_edge(Vertex u, Vertex v)
+{
+    VertexWeightPair item_Vertex_v{v};
+    VertexWeightPair item_Vertex_u{u};
     list<VertexWeightPair> &lista_u = adj[u];
-    for( auto itr = lista_u.begin(); itr!= lista_u.end(); ++itr){
-        if(itr->vertice == item_vertex_v.vertice){
-            itr = lista_u.erase( itr );
+    for (auto itr = lista_u.begin(); itr != lista_u.end(); ++itr)
+    {
+        if (itr->vertex == item_Vertex_v.vertex)
+        {
+            itr = lista_u.erase(itr);
         }
     }
-    list<VertexWeightPair> &lista_v = adj[v];
-    for( auto itr2 = lista_v.begin(); itr2!= lista_v.end(); ++itr2){
-        if(itr2->vertice == item_vertex_u.vertice){
-            itr2 = lista_v.erase( itr2 );
+    list <VertexWeightPair> &lista_v = adj[v];
+    for (auto itr2 = lista_v.begin(); itr2 != lista_v.end(); ++itr2)
+    {
+        if (itr2->vertex == item_Vertex_u.vertex)
+        {
+            itr2 = lista_v.erase(itr2);
         }
     }
     num_edges--;
 }
 
 template <typename T>
-void input_graph(Graph<T> &g, unsigned int num_edges){
-    vertex u = 0;
-    vertex v = 0;
-    weight peso = 0;
-    for(unsigned int i = 0; i < num_edges; ++i){
-        cin >> u >> v >> peso;
-        g.add_edge(u, v, peso);
+void input_WeightedGraphAL(WeightedGraphAL<T> &g, unsigned int num_edges)
+{
+    Vertex u = 0;
+    Vertex v = 0;
+    Weight weight = 0;
+    for (unsigned int i = 0; i < num_edges; ++i)
+    {
+        cin >> u >> v >> weight;
+        g.add_edge(u, v, weight);
     }
 }
 template <typename T>
-void display_list(list<T> &lst) {
-	for (auto item_vertex : lst) {
-		cout << "(" << item_vertex.vertice << ", " << item_vertex.peso << "), ";
-	}
-	cout << endl;
+void display_list(list<T> &lst)
+{
+    for (auto item_Vertex : lst)
+    {
+        cout << "(" << item_Vertex.vertex << ", " << item_Vertex.weight << "), ";
+    }
+    cout << endl;
 }
 template <typename T>
-void display_graph(Graph<T> &g){
-    for(unsigned int v = 0; v < g.get_num_vertices(); v++){
+void display_WeightedGraphAL(WeightedGraphAL<T> &g)
+{
+    for (unsigned int v = 0; v < g.get_num_vertices(); v++)
+    {
         cout << "v[" << v << "]: ";
-		list<T> lst = g.get_adj(v);
-		display_list( lst );
+        list<T> lst = g.get_adj(v);
+        display_list(lst);
     }
 }
-int main(){
+int main()
+{
     unsigned int num_vertices = 0;
     unsigned int num_edges = 0;
-    cin>> num_vertices >> num_edges;
-    cout << "num_vertices: "<< num_vertices <<endl;
-    cout << "num_edges: "<< num_edges <<endl;
-    Graph<VertexWeightPair> g{num_vertices};
-    input_graph(g, num_edges);
-    display_graph(g);
-    //g.remove_edge(2,3);
-    //cout<<"removendo..."<<endl;
-    //display_graph(g);
+    cin >> num_vertices >> num_edges;
+    cout << "num_vertices: " << num_vertices << endl;
+    cout << "num_edges: " << num_edges << endl;
+    WeightedGraphAL<VertexWeightPair> g{num_vertices};
+    input_WeightedGraphAL(g, num_edges);
+    display_WeightedGraphAL(g);
+    // g.remove_edge(2,3);
+    // cout<<"removendo..."<<endl;
+    // display_WeightedGraphAL(g);
     return 0;
 }
