@@ -3,7 +3,7 @@
 #include <list>
 using namespace std;
 
-// Implementação de um Grafo 
+// Implementação de um Grafo
 // utilizando lista de adjacência
 
 typedef unsigned int Vertex;
@@ -28,6 +28,7 @@ public:
     ~GraphAL();
     void add_edge(Vertex, Vertex);
     void remove_edge(Vertex, Vertex);
+    bool vertex_already_exists(Vertex u, Vertex v);
     list<T> get_adj(Vertex v) { return adj[v]; }
     unsigned int get_num_vertices() { return num_vertices; }
     unsigned int get_num_edges() { return num_edges; }
@@ -55,33 +56,13 @@ GraphAL<T>::~GraphAL()
 template <typename T>
 void GraphAL<T>::add_edge(Vertex u, Vertex v)
 {
-    int jaexiste = 0;
     ItemVertex item_Vertex_v{v};
     ItemVertex item_Vertex_u{u};
-    list<ItemVertex> &lista_u = adj[u];
-    for (auto itr = lista_u.begin(); itr != lista_u.end(); ++itr)
-    {
-        if (itr->value == item_Vertex_v.value)
-        {
-            jaexiste = 1;
-        }
-    }
-    if (jaexiste == 0)
+    if (vertex_already_exists(u, v) == false)
     {
         adj[u].push_back(item_Vertex_v);
     }
-
-    jaexiste = 0;
-
-    list<ItemVertex> &lista_v = adj[v];
-    for (auto itr2 = lista_v.begin(); itr2 != lista_v.end(); ++itr2)
-    {
-        if (itr2->value == item_Vertex_u.value)
-        {
-            jaexiste = 1;
-        }
-    }
-    if (jaexiste == 0)
+    if (vertex_already_exists(v, u) == false)
     {
         adj[v].push_back(item_Vertex_u);
     }
@@ -110,6 +91,21 @@ void GraphAL<T>::remove_edge(Vertex u, Vertex v)
         }
     }
     num_edges--;
+}
+template <typename T>
+bool GraphAL<T>::vertex_already_exists(Vertex u, Vertex v)
+{
+    ItemVertex item_Vertex_u{u};
+    ItemVertex item_Vertex_v{v};
+    list<ItemVertex> &lista_u = adj[u];
+    for (auto itr = lista_u.begin(); itr != lista_u.end(); ++itr)
+    {
+        if (itr->value == item_Vertex_v.value)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 template <typename T>
@@ -155,8 +151,8 @@ int main()
     GraphAL<ItemVertex> g{num_vertices};
     input_GraphAL(g, num_edges);
     display_GraphAL(g);
-    // g.remove_edge(2,3);
-    // cout<<"removendo..."<<endl;
-    // display_GraphAL(g);
+    g.remove_edge(0,2);
+    cout<<"removendo..."<<endl;
+    display_GraphAL(g);
     return 0;
 }
