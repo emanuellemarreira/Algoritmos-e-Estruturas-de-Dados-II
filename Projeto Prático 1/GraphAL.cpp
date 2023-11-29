@@ -151,8 +151,8 @@ int main()
     GraphAL<ItemVertex> g{num_vertices};
     input_GraphAL(g, num_edges);
     display_GraphAL(g);
-    g.remove_edge(0,2);
-    cout<<"removendo..."<<endl;
-    display_GraphAL(g);
+    //g.remove_edge(0,2);
+    //cout<<"removendo..."<<endl;
+    //display_GraphAL(g);
     return 0;
 }

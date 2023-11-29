@@ -31,6 +31,7 @@ public:
     WeightedGraphAL(unsigned int);
     ~WeightedGraphAL();
     void add_edge(Vertex, Vertex, Weight);
+    bool vertex_already_exists(Vertex u, Vertex v);
     void remove_edge(Vertex, Vertex);
     unsigned int get_num_vertices() { return num_vertices; }
     unsigned int get_num_edges() { return num_edges; }
@@ -59,10 +60,32 @@ template <typename T>
 void WeightedGraphAL<T>::add_edge(Vertex u, Vertex v, Weight weight)
 {
     VertexWeightPair item_Vertex_v{v, weight};
-    adj[u].push_back(item_Vertex_v);
     VertexWeightPair item_Vertex_u{u, weight};
-    adj[v].push_back(item_Vertex_u);
+    if (vertex_already_exists(u, v) == false)
+    {
+        adj[u].push_back(item_Vertex_v);
+    }
+    if (vertex_already_exists(v, u) == false)
+    {
+        adj[v].push_back(item_Vertex_u);
+    }
     num_edges++;
+}
+
+template <typename T>
+bool WeightedGraphAL<T>::vertex_already_exists(Vertex u, Vertex v)
+{
+    VertexWeightPair item_Vertex_u{u};
+    VertexWeightPair item_Vertex_v{v};
+    list<VertexWeightPair> &lista_u = adj[u];
+    for (auto itr = lista_u.begin(); itr != lista_u.end(); ++itr)
+    {
+        if (itr->vertex == item_Vertex_v.vertex)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 template <typename T>
@@ -130,7 +153,7 @@ int main()
     WeightedGraphAL<VertexWeightPair> g{num_vertices};
     input_WeightedGraphAL(g, num_edges);
     display_WeightedGraphAL(g);
-    g.remove_edge(2,3);
+    g.remove_edge(0,2);
     cout<<"removendo..."<<endl;
     display_WeightedGraphAL(g);
     return 0;
