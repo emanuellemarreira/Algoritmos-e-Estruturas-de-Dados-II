@@ -5,6 +5,8 @@
 #include <iomanip> // setw
 using namespace std;
 
+//implementação de um grafo por meio de uma matriz de adjacência
+
 typedef unsigned int Vertex;
 typedef unsigned int Weight;
 

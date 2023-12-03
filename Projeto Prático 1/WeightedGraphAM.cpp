@@ -6,6 +6,8 @@
 #include <limits>
 using namespace std;
 
+//implementação de um grafo ponderado utilizando matriz de adjacência
+
 const float inf = std::numeric_limits<float>::infinity();
 
 typedef unsigned int Vertex;
