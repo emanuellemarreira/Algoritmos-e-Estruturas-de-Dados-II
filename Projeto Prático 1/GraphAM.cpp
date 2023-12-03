@@ -63,7 +63,7 @@ void GraphAM::remove_edge(Vertex u, Vertex v)
 	Edge edge{0};
 	adj[u][v] = edge;
 	adj[v][u] = edge;
-	num_edges++;
+	num_edges--;
 }
 
 GraphAM::~GraphAM()

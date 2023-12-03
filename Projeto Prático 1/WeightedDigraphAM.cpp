@@ -3,22 +3,26 @@
 #include <vector>
 #include <list>
 #include <iomanip> // setw
+#include <limits>
 using namespace std;
 
-//implementação de grafo direcionado utilizando matriz de adjacência
+//implementação de um grafo ponderado e direcionado utilizando matriz de adjacência
+
+const float inf = std::numeric_limits<float>::infinity();
 
 typedef unsigned int Vertex;
-typedef unsigned int Weight;
+
+typedef float Weight;
 
 class Edge
 {
 public:
 	Weight weight;
-	Edge() : weight(0) {}
+	Edge() : weight(inf) {}
 	Edge(Weight _weight) : weight(_weight) {}
 };
 
-class DigraphAM
+class WeightedDigraphAM
 {
 private:
 	unsigned int num_vertices;
@@ -26,9 +30,9 @@ private:
 	Edge **adj;
 
 public:
-	DigraphAM(unsigned int);
-	~DigraphAM();
-	void add_edge(Vertex, Vertex);
+	WeightedDigraphAM(unsigned int);
+	~WeightedDigraphAM();
+	void add_edge(Vertex, Vertex, Weight);
 	list<Vertex> get_adj(Vertex);
 	Weight get_weight_edge(Vertex, Vertex);
 	void remove_edge(Vertex, Vertex);
@@ -36,58 +40,61 @@ public:
 	unsigned int get_num_edges();
 };
 
-unsigned int DigraphAM::get_num_vertices()
+unsigned int WeightedDigraphAM::get_num_vertices()
 {
 	return num_vertices;
 }
 
-unsigned int DigraphAM::get_num_edges()
+unsigned int WeightedDigraphAM::get_num_edges()
 {
 	return num_edges;
 }
 
-DigraphAM::DigraphAM(unsigned int _num_vertices) : num_vertices(_num_vertices),
-											   num_edges(0)
+WeightedDigraphAM::WeightedDigraphAM(unsigned int _num_vertices) : num_vertices(_num_vertices),
+															   num_edges(0)
 {
 	const unsigned int LINHAS = num_vertices;
 	const unsigned int COLUNAS = num_vertices;
 	adj = new Edge *[LINHAS];
-	for (int i = 0; i < LINHAS; ++i)
+	for (unsigned int i = 0; i < LINHAS; ++i)
 	{
 		adj[i] = new Edge[COLUNAS];
 	}
 }
 
-void DigraphAM::remove_edge(Vertex u, Vertex v)
+void WeightedDigraphAM::remove_edge(Vertex u, Vertex v)
 {
-	Edge edge{0};
+	Edge edge{inf};
 	adj[u][v] = edge;
 	num_edges--;
 }
 
-DigraphAM::~DigraphAM()
+WeightedDigraphAM::~WeightedDigraphAM()
 {
 	const unsigned int LINHAS = num_vertices;
-	for (int i = 0; i < LINHAS; ++i)
+	for (unsigned int i = 0; i < LINHAS; ++i)
 	{
 		delete[] adj[i];
 	}
 	delete[] adj;
 }
 
-void DigraphAM::add_edge(Vertex u, Vertex v)
+void WeightedDigraphAM::add_edge(Vertex u, Vertex v, Weight weight)
 {
-	Edge edge{1};
-	adj[u][v] = edge;
-	num_edges++;
+	if (adj[u][v].weight == inf)
+	{
+		Edge edge{weight};
+		adj[u][v] = edge;
+		num_edges++;
+	}
 }
 
-std::list<Vertex> DigraphAM::get_adj(Vertex u)
+std::list<Vertex> WeightedDigraphAM::get_adj(Vertex u)
 {
 	std::list<Vertex> values;
-	for (int v = 0; v < num_vertices; ++v)
+	for (unsigned int v = 0; v < num_vertices; ++v)
 	{
-		if (adj[u][v].weight != 0)
+		if (adj[u][v].weight != inf)
 		{
 			values.push_back(v);
 		}
@@ -95,21 +102,21 @@ std::list<Vertex> DigraphAM::get_adj(Vertex u)
 	return values;
 }
 
-Weight DigraphAM::get_weight_edge(Vertex u, Vertex v)
+Weight WeightedDigraphAM::get_weight_edge(Vertex u, Vertex v)
 {
 	return adj[u][v].weight;
 }
 
-void display_matadj_graph(DigraphAM &g)
+void display_matadj_graph(WeightedDigraphAM &g)
 {
 	int k = 0;
 
 	for (unsigned int i = 0; i < g.get_num_vertices(); i++)
 	{
-		cout << std::setw(k) << g.get_weight_edge(i, 0);
+		cout << std::setw(k) << g.get_weight_edge(i, 0) << " ";
 		for (unsigned int j = 1; j < g.get_num_vertices(); j++)
 		{
-			cout << std::setw(k + 2) << g.get_weight_edge(i, j);
+			cout << std::setw(k + 2) << g.get_weight_edge(i, j) << " ";
 		}
 		cout << endl;
 	}
@@ -126,18 +133,23 @@ int main()
 	cout << "num_vertices: " << num_vertices << endl;
 	cout << "num_edges: " << num_edges << endl;
 
-	DigraphAM g{num_vertices};
+	WeightedDigraphAM g{num_vertices};
+
+	Vertex u = 0;
+	Vertex v = 0;
+
+	Weight weight = inf;
 
 	for (unsigned int i = 0; i < num_edges; ++i)
 	{
-		Vertex u, v;
-		cin >> u >> v;
-		g.add_edge(u, v);
+		cin >> u >> v >> weight;
+		g.add_edge(u, v, weight);
 	}
 
 	display_matadj_graph(g);
 
-    cout << "removendo..." << endl;
+	cout<< "removendo..."  <<endl;
+
 	g.remove_edge(1, 2);
 
 	display_matadj_graph(g);
