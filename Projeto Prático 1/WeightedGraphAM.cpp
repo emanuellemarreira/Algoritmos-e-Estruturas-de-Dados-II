@@ -150,9 +150,11 @@ int main()
 
 	display_matadj_graph(g);
 
-	// g.remove_edge(7, 8);
+	cout<< "removendo..."  <<endl;
 
-	// display_matadj_graph(g);
+	g.remove_edge(1, 2);
+
+	display_matadj_graph(g);
 
 	return 0;
 }

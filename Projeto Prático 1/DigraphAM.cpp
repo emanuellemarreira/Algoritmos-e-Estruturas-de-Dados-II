@@ -5,8 +5,6 @@
 #include <iomanip> // setw
 using namespace std;
 
-//implementação de um grafo por meio de uma matriz de adjacência
-
 typedef unsigned int Vertex;
 typedef unsigned int Weight;
 
@@ -18,7 +16,7 @@ public:
 	Edge(Weight _weight) : weight(_weight) {}
 };
 
-class GraphAM
+class DigraphAM
 {
 private:
 	unsigned int num_vertices;
@@ -26,8 +24,8 @@ private:
 	Edge **adj;
 
 public:
-	GraphAM(unsigned int);
-	~GraphAM();
+	DigraphAM(unsigned int);
+	~DigraphAM();
 	void add_edge(Vertex, Vertex);
 	list<Vertex> get_adj(Vertex);
 	Weight get_weight_edge(Vertex, Vertex);
@@ -36,17 +34,17 @@ public:
 	unsigned int get_num_edges();
 };
 
-unsigned int GraphAM::get_num_vertices()
+unsigned int DigraphAM::get_num_vertices()
 {
 	return num_vertices;
 }
 
-unsigned int GraphAM::get_num_edges()
+unsigned int DigraphAM::get_num_edges()
 {
 	return num_edges;
 }
 
-GraphAM::GraphAM(unsigned int _num_vertices) : num_vertices(_num_vertices),
+DigraphAM::DigraphAM(unsigned int _num_vertices) : num_vertices(_num_vertices),
 											   num_edges(0)
 {
 	const unsigned int LINHAS = num_vertices;
@@ -58,15 +56,14 @@ GraphAM::GraphAM(unsigned int _num_vertices) : num_vertices(_num_vertices),
 	}
 }
 
-void GraphAM::remove_edge(Vertex u, Vertex v)
+void DigraphAM::remove_edge(Vertex u, Vertex v)
 {
 	Edge edge{0};
 	adj[u][v] = edge;
-	adj[v][u] = edge;
 	num_edges++;
 }
 
-GraphAM::~GraphAM()
+DigraphAM::~DigraphAM()
 {
 	const unsigned int LINHAS = num_vertices;
 	for (int i = 0; i < LINHAS; ++i)
@@ -76,15 +73,14 @@ GraphAM::~GraphAM()
 	delete[] adj;
 }
 
-void GraphAM::add_edge(Vertex u, Vertex v)
+void DigraphAM::add_edge(Vertex u, Vertex v)
 {
 	Edge edge{1};
 	adj[u][v] = edge;
-	adj[v][u] = edge;
 	num_edges++;
 }
 
-std::list<Vertex> GraphAM::get_adj(Vertex u)
+std::list<Vertex> DigraphAM::get_adj(Vertex u)
 {
 	std::list<Vertex> values;
 	for (int v = 0; v < num_vertices; ++v)
@@ -97,12 +93,12 @@ std::list<Vertex> GraphAM::get_adj(Vertex u)
 	return values;
 }
 
-Weight GraphAM::get_weight_edge(Vertex u, Vertex v)
+Weight DigraphAM::get_weight_edge(Vertex u, Vertex v)
 {
 	return adj[u][v].weight;
 }
 
-void display_matadj_graph(GraphAM &g)
+void display_matadj_graph(DigraphAM &g)
 {
 	int k = 0;
 
@@ -128,7 +124,7 @@ int main()
 	cout << "num_vertices: " << num_vertices << endl;
 	cout << "num_edges: " << num_edges << endl;
 
-	GraphAM g{num_vertices};
+	DigraphAM g{num_vertices};
 
 	for (unsigned int i = 0; i < num_edges; ++i)
 	{
@@ -139,7 +135,8 @@ int main()
 
 	display_matadj_graph(g);
 
-	g.remove_edge(7, 8);
+    cout << "removendo..." << endl;
+	g.remove_edge(1, 2);
 
 	display_matadj_graph(g);
 
