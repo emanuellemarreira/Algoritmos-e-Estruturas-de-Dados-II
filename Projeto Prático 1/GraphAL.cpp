@@ -135,7 +135,7 @@ void display_GraphAL(GraphAL<T> &g)
 {
     for (unsigned int v = 0; v < g.get_num_vertices(); v++)
     {
-        cout << "v[" << v << "]: ";
+        cout << v << ": ";
         list<T> lst = g.get_adj(v);
         display_list(lst);
     }
@@ -151,8 +151,5 @@ int main()
     GraphAL<ItemVertex> g{num_vertices};
     input_GraphAL(g, num_edges);
     display_GraphAL(g);
-    //g.remove_edge(0,2);
-    //cout<<"removendo..."<<endl;
-    //display_GraphAL(g);
     return 0;
 }
