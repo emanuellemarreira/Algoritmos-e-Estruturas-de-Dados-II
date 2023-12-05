@@ -1,75 +1,78 @@
 #include <iostream>
-#include <cstdlib> // atoi
+#include <cstdlib>
 #include <vector>
 #include <list>
-#include <iomanip> // setw
+#include <iomanip>
 #include <limits>
 using namespace std;
 
-//implementação de um grafo ponderado e direcionado utilizando matriz de adjacência
+// implementação de um grafo ponderado e direcionado utilizando matriz de adjacência
 
 const float inf = std::numeric_limits<float>::infinity();
 
-typedef unsigned int Vertex;
-
-typedef float Weight;
-
+template <typename T>
 class Edge
 {
 public:
-	Weight weight;
+	T weight;
 	Edge() : weight(inf) {}
-	Edge(Weight _weight) : weight(_weight) {}
+	Edge(T _weight) : weight(_weight) {}
 };
 
+template <typename T>
 class WeightedDigraphAM
 {
 private:
 	unsigned int num_vertices;
 	unsigned int num_edges;
-	Edge **adj;
+	Edge<T> **adj;
 
 public:
 	WeightedDigraphAM(unsigned int);
 	~WeightedDigraphAM();
-	void add_edge(Vertex, Vertex, Weight);
-	list<Vertex> get_adj(Vertex);
-	Weight get_weight_edge(Vertex, Vertex);
-	void remove_edge(Vertex, Vertex);
+	void add_edge(unsigned int, unsigned int, T);
+	list<unsigned int> get_adj(unsigned int);
+	T get_weight_edge(unsigned int, unsigned int);
+	void remove_edge(unsigned int, unsigned int);
 	unsigned int get_num_vertices();
 	unsigned int get_num_edges();
 };
 
-unsigned int WeightedDigraphAM::get_num_vertices()
+template <typename T>
+unsigned int WeightedDigraphAM<T>::get_num_vertices()
 {
 	return num_vertices;
 }
 
-unsigned int WeightedDigraphAM::get_num_edges()
+template <typename T>
+unsigned int WeightedDigraphAM<T>::get_num_edges()
 {
 	return num_edges;
 }
 
-WeightedDigraphAM::WeightedDigraphAM(unsigned int _num_vertices) : num_vertices(_num_vertices),
-															   num_edges(0)
+template <typename T>
+WeightedDigraphAM<T>::WeightedDigraphAM(unsigned int _num_vertices) : num_vertices(_num_vertices),
+																	  num_edges(0)
 {
 	const unsigned int LINHAS = num_vertices;
 	const unsigned int COLUNAS = num_vertices;
-	adj = new Edge *[LINHAS];
+	adj = new Edge<T> *[LINHAS];
 	for (unsigned int i = 0; i < LINHAS; ++i)
 	{
-		adj[i] = new Edge[COLUNAS];
+		adj[i] = new Edge<T>[COLUNAS];
 	}
 }
 
-void WeightedDigraphAM::remove_edge(Vertex u, Vertex v)
+template <typename T>
+void WeightedDigraphAM<T>::remove_edge(unsigned int u, unsigned int v)
 {
-	Edge edge{inf};
+	Edge<T> edge{inf};
 	adj[u][v] = edge;
 	num_edges--;
 }
 
-WeightedDigraphAM::~WeightedDigraphAM()
+template <typename T>
+WeightedDigraphAM<T>::~WeightedDigraphAM()
 {
 	const unsigned int LINHAS = num_vertices;
 	for (unsigned int i = 0; i < LINHAS; ++i)
@@ -79,19 +82,21 @@ WeightedDigraphAM::~WeightedDigraphAM()
 	delete[] adj;
 }
 
-void WeightedDigraphAM::add_edge(Vertex u, Vertex v, Weight weight)
+template <typename T>
+void WeightedDigraphAM<T>::add_edge(unsigned int u, unsigned int v, T weight)
 {
 	if (adj[u][v].weight == inf)
 	{
-		Edge edge{weight};
+		Edge<T> edge{weight};
 		adj[u][v] = edge;
 		num_edges++;
 	}
 }
 
-std::list<Vertex> WeightedDigraphAM::get_adj(Vertex u)
+template <typename T>
+std::list<unsigned int> WeightedDigraphAM<T>::get_adj(unsigned int u)
 {
-	std::list<Vertex> values;
+	std::list<unsigned int> values;
 	for (unsigned int v = 0; v < num_vertices; ++v)
 	{
 		if (adj[u][v].weight != inf)
@@ -102,12 +107,14 @@ std::list<Vertex> WeightedDigraphAM::get_adj(Vertex u)
 	return values;
 }
 
-Weight WeightedDigraphAM::get_weight_edge(Vertex u, Vertex v)
+template <typename T>
+T WeightedDigraphAM<T>::get_weight_edge(unsigned int u, unsigned int v)
 {
 	return adj[u][v].weight;
 }
 
-void display_matadj_graph(WeightedDigraphAM &g)
+template <typename T>
+void display_matadj_graph(WeightedDigraphAM<T> &g)
 {
 	int k = 0;
 
@@ -133,24 +140,18 @@ int main()
 	cout << "num_vertices: " << num_vertices << endl;
 	cout << "num_edges: " << num_edges << endl;
 
-	WeightedDigraphAM g{num_vertices};
+	WeightedDigraphAM<float> g{num_vertices};
 
-	Vertex u = 0;
-	Vertex v = 0;
+	unsigned int u = 0;
+	unsigned int v = 0;
 
-	Weight weight = inf;
+	float weight = inf;
 
 	for (unsigned int i = 0; i < num_edges; ++i)
 	{
 		cin >> u >> v >> weight;
 		g.add_edge(u, v, weight);
 	}
-
-	display_matadj_graph(g);
-
-	cout<< "removendo..."  <<endl;
-
-	g.remove_edge(1, 2);
 
 	display_matadj_graph(g);
 
