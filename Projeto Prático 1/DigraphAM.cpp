@@ -1,71 +1,77 @@
 #include <iostream>
-#include <cstdlib> // atoi
+#include <cstdlib>
 #include <vector>
 #include <list>
-#include <iomanip> // setw
+#include <iomanip>
 using namespace std;
 
-//implementação de grafo direcionado utilizando matriz de adjacência
-
+// implementação de grafo direcionado utilizando matriz de adjacência
 typedef unsigned int Vertex;
 typedef unsigned int Weight;
 
+template <typename T>
 class Edge
 {
 public:
-	Weight weight;
+	T weight;
 	Edge() : weight(0) {}
-	Edge(Weight _weight) : weight(_weight) {}
+	Edge(T _weight) : weight(_weight) {}
 };
 
+template <typename T>
 class DigraphAM
 {
 private:
 	unsigned int num_vertices;
 	unsigned int num_edges;
-	Edge **adj;
+	Edge<T> **adj;
 
 public:
 	DigraphAM(unsigned int);
 	~DigraphAM();
 	void add_edge(Vertex, Vertex);
 	list<Vertex> get_adj(Vertex);
-	Weight get_weight_edge(Vertex, Vertex);
+	T get_weight_edge(Vertex, Vertex);
 	void remove_edge(Vertex, Vertex);
 	unsigned int get_num_vertices();
 	unsigned int get_num_edges();
 };
 
-unsigned int DigraphAM::get_num_vertices()
+template <typename T>
+unsigned int DigraphAM<T>::get_num_vertices()
 {
 	return num_vertices;
 }
 
-unsigned int DigraphAM::get_num_edges()
+template <typename T>
+unsigned int DigraphAM<T>::get_num_edges()
 {
 	return num_edges;
 }
 
-DigraphAM::DigraphAM(unsigned int _num_vertices) : num_vertices(_num_vertices),
-											   num_edges(0)
+template <typename T>
+DigraphAM<T>::DigraphAM(unsigned int _num_vertices) : num_vertices(_num_vertices),
+													  num_edges(0)
 {
 	const unsigned int LINHAS = num_vertices;
 	const unsigned int COLUNAS = num_vertices;
-	adj = new Edge *[LINHAS];
+	adj = new Edge<T> *[LINHAS];
 	for (int i = 0; i < LINHAS; ++i)
 	{
-		adj[i] = new Edge[COLUNAS];
+		adj[i] = new Edge<T>[COLUNAS];
 	}
 }
 
-void DigraphAM::remove_edge(Vertex u, Vertex v)
+template <typename T>
+void DigraphAM<T>::remove_edge(Vertex u, Vertex v)
 {
-	Edge edge{0};
+	Edge<T> edge{0};
 	adj[u][v] = edge;
 	num_edges--;
 }
 
-DigraphAM::~DigraphAM()
+template <typename T>
+DigraphAM<T>::~DigraphAM()
 {
 	const unsigned int LINHAS = num_vertices;
 	for (int i = 0; i < LINHAS; ++i)
@@ -75,14 +81,19 @@ DigraphAM::~DigraphAM()
 	delete[] adj;
 }
 
-void DigraphAM::add_edge(Vertex u, Vertex v)
+template <typename T>
+void DigraphAM<T>::add_edge(Vertex u, Vertex v)
 {
-	Edge edge{1};
-	adj[u][v] = edge;
-	num_edges++;
+	if (adj[u][v].weight == 0)
+	{
+		Edge<T> edge{1};
+		adj[u][v] = edge;
+		num_edges++;
+	}
 }
 
-std::list<Vertex> DigraphAM::get_adj(Vertex u)
+template <typename T>
+std::list<Vertex> DigraphAM<T>::get_adj(Vertex u)
 {
 	std::list<Vertex> values;
 	for (int v = 0; v < num_vertices; ++v)
@@ -95,12 +106,14 @@ std::list<Vertex> DigraphAM::get_adj(Vertex u)
 	return values;
 }
 
-Weight DigraphAM::get_weight_edge(Vertex u, Vertex v)
+template <typename T>
+T DigraphAM<T>::get_weight_edge(Vertex u, Vertex v)
 {
 	return adj[u][v].weight;
 }
 
-void display_matadj_graph(DigraphAM &g)
+template <typename T>
+void display_matadj_graph(DigraphAM<T> &g)
 {
 	int k = 0;
 
@@ -126,7 +139,7 @@ int main()
 	cout << "num_vertices: " << num_vertices << endl;
 	cout << "num_edges: " << num_edges << endl;
 
-	DigraphAM g{num_vertices};
+	DigraphAM<Weight> g{num_vertices};
 
 	for (unsigned int i = 0; i < num_edges; ++i)
 	{
@@ -134,11 +147,6 @@ int main()
 		cin >> u >> v;
 		g.add_edge(u, v);
 	}
-
-	display_matadj_graph(g);
-
-    cout << "removendo..." << endl;
-	g.remove_edge(1, 2);
 
 	display_matadj_graph(g);
 
