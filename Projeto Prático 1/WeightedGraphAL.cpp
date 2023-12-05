@@ -3,7 +3,7 @@
 #include <list>
 using namespace std;
 
-// Implementação de um grafo ponderado 
+// Implementação de um grafo ponderado
 // utilizando lista de adjacência
 
 typedef unsigned int Vertex;
@@ -41,7 +41,7 @@ public:
 template <typename T>
 WeightedGraphAL<T>::WeightedGraphAL(unsigned int num_vertices) : num_vertices(num_vertices)
 {
-    adj = new list <VertexWeightPair> [ num_vertices ];
+    adj = new list<VertexWeightPair>[num_vertices];
 }
 template <typename T>
 WeightedGraphAL<T>::~WeightedGraphAL()
@@ -101,7 +101,7 @@ void WeightedGraphAL<T>::remove_edge(Vertex u, Vertex v)
             itr = lista_u.erase(itr);
         }
     }
-    list <VertexWeightPair> &lista_v = adj[v];
+    list<VertexWeightPair> &lista_v = adj[v];
     for (auto itr2 = lista_v.begin(); itr2 != lista_v.end(); ++itr2)
     {
         if (itr2->vertex == item_Vertex_u.vertex)
@@ -138,7 +138,7 @@ void display_WeightedGraphAL(WeightedGraphAL<T> &g)
 {
     for (unsigned int v = 0; v < g.get_num_vertices(); v++)
     {
-        cout << "v[" << v << "]: ";
+        cout << v << ": ";
         list<T> lst = g.get_adj(v);
         display_list(lst);
     }
@@ -152,9 +152,6 @@ int main()
     cout << "num_edges: " << num_edges << endl;
     WeightedGraphAL<VertexWeightPair> g{num_vertices};
     input_WeightedGraphAL(g, num_edges);
-    display_WeightedGraphAL(g);
-    g.remove_edge(0,2);
-    cout<<"removendo..."<<endl;
     display_WeightedGraphAL(g);
     return 0;
 }
