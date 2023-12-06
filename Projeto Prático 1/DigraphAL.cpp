@@ -16,7 +16,7 @@ public:
 };
 
 template <typename T>
-class DIgraphAL
+class DigraphAL
 {
 private:
     unsigned int num_vertices;
@@ -24,8 +24,8 @@ private:
     list<T> *adj;
 
 public:
-    DIgraphAL(unsigned int);
-    ~DIgraphAL();
+    DigraphAL(unsigned int);
+    ~DigraphAL();
     void add_edge(Vertex, Vertex);
     void remove_edge(Vertex, Vertex);
     bool vertex_already_exists(Vertex u, Vertex v);
@@ -35,13 +35,13 @@ public:
 };
 
 template <typename T>
-DIgraphAL<T>::DIgraphAL(unsigned int num_vertices) : num_vertices(num_vertices)
+DigraphAL<T>::DigraphAL(unsigned int num_vertices) : num_vertices(num_vertices)
 {
     adj = new list<ItemVertex>[num_vertices];
 }
 
 template <typename T>
-DIgraphAL<T>::~DIgraphAL()
+DigraphAL<T>::~DigraphAL()
 {
     for (unsigned int u = 0; u < num_vertices; ++u)
     {
@@ -54,7 +54,7 @@ DIgraphAL<T>::~DIgraphAL()
 }
 
 template <typename T>
-void DIgraphAL<T>::add_edge(Vertex u, Vertex v)
+void DigraphAL<T>::add_edge(Vertex u, Vertex v)
 {
     ItemVertex item_Vertex_v{v};
     ItemVertex item_Vertex_u{u};
@@ -66,7 +66,7 @@ void DIgraphAL<T>::add_edge(Vertex u, Vertex v)
 }
 
 template <typename T>
-void DIgraphAL<T>::remove_edge(Vertex u, Vertex v)
+void DigraphAL<T>::remove_edge(Vertex u, Vertex v)
 {
     ItemVertex item_Vertex_v{v};
     ItemVertex item_Vertex_u{u};
@@ -83,7 +83,7 @@ void DIgraphAL<T>::remove_edge(Vertex u, Vertex v)
     num_edges--;
 }
 template <typename T>
-bool DIgraphAL<T>::vertex_already_exists(Vertex u, Vertex v)
+bool DigraphAL<T>::vertex_already_exists(Vertex u, Vertex v)
 {
     ItemVertex item_Vertex_u{u};
     ItemVertex item_Vertex_v{v};
@@ -101,7 +101,7 @@ bool DIgraphAL<T>::vertex_already_exists(Vertex u, Vertex v)
 }
 
 template <typename T>
-void input_GraphAL(DIgraphAL<T> &g, unsigned int num_edges)
+void input_GraphAL(DigraphAL<T> &g, unsigned int num_edges)
 {
     Vertex u = 0;
     Vertex v = 0;
@@ -123,7 +123,7 @@ void display_list(list<T> &lst)
 }
 
 template <typename T>
-void display_GraphAL(DIgraphAL<T> &g)
+void display_GraphAL(DigraphAL<T> &g)
 {
     for (unsigned int v = 0; v < g.get_num_vertices(); v++)
     {
@@ -140,7 +140,7 @@ int main()
     cin >> num_vertices >> num_edges;
     cout << "num_vertices: " << num_vertices << endl;
     cout << "num_edges: " << num_edges << endl;
-    DIgraphAL<ItemVertex> g{num_vertices};
+    DigraphAL<ItemVertex> g{num_vertices};
     input_GraphAL(g, num_edges);
     display_GraphAL(g);
     return 0;
