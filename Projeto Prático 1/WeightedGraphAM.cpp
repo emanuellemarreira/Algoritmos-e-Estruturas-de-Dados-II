@@ -20,7 +20,7 @@ public:
 };
 
 template <typename T>
-class WeightedDigraphAM
+class WeightedGraphAM
 {
 private:
     unsigned int num_vertices;
@@ -28,8 +28,8 @@ private:
     Edge<T> **adj;
 
 public:
-    WeightedDigraphAM(unsigned int);
-    ~WeightedDigraphAM();
+    WeightedGraphAM(unsigned int);
+    ~WeightedGraphAM();
     void add_edge(unsigned int, unsigned int, T);
     list<unsigned int> get_adj(unsigned int);
     T get_weight_edge(unsigned int, unsigned int);
@@ -39,19 +39,19 @@ public:
 };
 
 template <typename T>
-unsigned int WeightedDigraphAM<T>::get_num_vertices()
+unsigned int WeightedGraphAM<T>::get_num_vertices()
 {
     return num_vertices;
 }
 
 template <typename T>
-unsigned int WeightedDigraphAM<T>::get_num_edges()
+unsigned int WeightedGraphAM<T>::get_num_edges()
 {
     return num_edges;
 }
 
 template <typename T>
-WeightedDigraphAM<T>::WeightedDigraphAM(unsigned int _num_vertices) : num_vertices(_num_vertices),
+WeightedGraphAM<T>::WeightedGraphAM(unsigned int _num_vertices) : num_vertices(_num_vertices),
                                                                   num_edges(0)
 {
     const unsigned int LINHAS = num_vertices;
@@ -64,7 +64,7 @@ WeightedDigraphAM<T>::WeightedDigraphAM(unsigned int _num_vertices) : num_vertic
 }
 
 template <typename T>
-void WeightedDigraphAM<T>::remove_edge(unsigned int u, unsigned int v)
+void WeightedGraphAM<T>::remove_edge(unsigned int u, unsigned int v)
 {
     Edge<T> edge{inf};
     adj[u][v] = edge;
@@ -73,7 +73,7 @@ void WeightedDigraphAM<T>::remove_edge(unsigned int u, unsigned int v)
 }
 
 template <typename T>
-WeightedDigraphAM<T>::~WeightedDigraphAM()
+WeightedGraphAM<T>::~WeightedGraphAM()
 {
     const unsigned int LINHAS = num_vertices;
     for (unsigned int i = 0; i < LINHAS; ++i)
@@ -84,7 +84,7 @@ WeightedDigraphAM<T>::~WeightedDigraphAM()
 }
 
 template <typename T>
-void WeightedDigraphAM<T>::add_edge(unsigned int u, unsigned int v, T weight)
+void WeightedGraphAM<T>::add_edge(unsigned int u, unsigned int v, T weight)
 {
     if (adj[u][v].weight == inf)
     {
@@ -96,7 +96,7 @@ void WeightedDigraphAM<T>::add_edge(unsigned int u, unsigned int v, T weight)
 }
 
 template <typename T>
-std::list<unsigned int> WeightedDigraphAM<T>::get_adj(unsigned int u)
+std::list<unsigned int> WeightedGraphAM<T>::get_adj(unsigned int u)
 {
     std::list<unsigned int> values;
     for (unsigned int v = 0; v < num_vertices; ++v)
@@ -110,13 +110,13 @@ std::list<unsigned int> WeightedDigraphAM<T>::get_adj(unsigned int u)
 }
 
 template <typename T>
-T WeightedDigraphAM<T>::get_weight_edge(unsigned int u, unsigned int v)
+T WeightedGraphAM<T>::get_weight_edge(unsigned int u, unsigned int v)
 {
     return adj[u][v].weight;
 }
 
 template <typename T>
-void display_matadj_graph(WeightedDigraphAM<T> &g)
+void display_matadj_graph(WeightedGraphAM<T> &g)
 {
     int k = 0;
 
@@ -142,7 +142,7 @@ int main()
     cout << "num_vertices: " << num_vertices << endl;
     cout << "num_edges: " << num_edges << endl;
 
-    WeightedDigraphAM<float> g{num_vertices};
+    WeightedGraphAM<float> g{num_vertices};
 
     unsigned int u = 0;
     unsigned int v = 0;
