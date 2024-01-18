@@ -1,18 +1,17 @@
 #include <iostream>
 #include <vector>
 #include <list>
-#include <algorithm> //pro sort, TEMPORARIOOOOOOOOOOOOOOOOOOOOOOOOO
 using namespace std;
 
-// Implementação de um grafo ponderado
-// utilizando lista de adjacência
+// Implementação do algoritmo de Kruskal (Cormen)
+// utilizando o TAD UnionFind com quick find (Sedgewick)
 
 typedef unsigned int Vertex;
 typedef float Weight;
 
 class Edge{
     public:
-        Vertex vertex1; //faz conexoes uv
+        Vertex vertex1;
         Vertex vertex2;
         Weight weight;
         Edge() {}
@@ -65,37 +64,31 @@ public:
     }
 };
 
-template <typename T>
+void selectionSort(vector<Edge> &vetor);
+
 class UnionFind
 {
 private:
     vector<Vertex> id;
-    unsigned int count; // numero de componentes
 public:
-    UnionFind(int N) : id(N), count(N)
+    UnionFind(int N) : id(N){}
+    void makeSet(WeightedGraphAL<VertexWeightPair> &g) 
     {
-        // for(unsigned int i = 0; i < N; i++){
-        //   id[i] = i;  //todo identificador do conjunto no início é ele mesmo
-        //}
-    }
-
-    void makeSet(WeightedGraphAL<VertexWeightPair> &g) //tem o argumento T v
-    {
-        ///id[v] = v;
         for(unsigned int i = 0; i < g.get_num_vertices(); i++){
             id[i] = i;  //todo identificador do conjunto no início é ele mesmo
         }
     }
 
     // quick find
-    Vertex find(Vertex p)
+    Vertex findSet(Vertex p)
     {
         return id[p];
     }
+
     void unionf(Vertex p, Vertex q)
     {
-        Vertex pID = find(p);
-        Vertex qID = find(q);
+        Vertex pID = findSet(p);
+        Vertex qID = findSet(q);
         if (pID == qID)
         {
             return; // ja estao no mesmo componente
@@ -107,40 +100,37 @@ public:
                 id[i] = qID;
             }
         }
-        count--;
     }
-    bool connected(Vertex p, Vertex q)
-    {
-        return find(p) == find(q); // se id sao iguais sao do mesmo conjunto logo estao conectados
-    }
-
-    static bool compareByWeight(const Edge &a, const Edge &b) {
-        return a.weight < b.weight;
-    }
-
+    
     vector<Edge> Kruskal(WeightedGraphAL<VertexWeightPair> &g)
     {
         vector<Edge> A;
         vector<Edge> vector_edges = g.return_edges();
-        //for(auto v : vector_vertices){
-        makeSet(g); //fazendo o makeset pra todos como era no construtor, era pra enviar v por v
-        //}
-        sort(vector_edges.begin(), vector_edges.end(), compareByWeight);
-        //for (auto item : vector_edges){
-           // cout << "("<< item.vertex1 << " , " << item.vertex2<<" , "<< item.weight<<" ) ";
-        //}
+        makeSet(g); 
+        selectionSort(vector_edges);
         for (auto item : vector_edges){
-            //cout << "fora = " << item.vertex1 <<", "<< item.vertex2 << " / "<<id[item.vertex1] << ", " << id[item.vertex2] << ": " <<connected(item.vertex1, item.vertex2)<<endl;
-            if (find(item.vertex1) != find(item.vertex2)){
+            if (findSet(item.vertex1) != findSet(item.vertex2)){
                 A.push_back(item);
                 unionf(item.vertex1, item.vertex2);
-                //cout << "dentro = " << item.vertex1 <<", "<< item.vertex2 << " / "<<id[item.vertex1] << ", " << id[item.vertex2] << ": " <<connected(item.vertex1, item.vertex2)<<endl;
             }
         }
         return A;
     }
 };
 
+void selectionSort(vector<Edge> &vetor){
+        for(unsigned int i = 0; i < vetor.size(); i++){
+            int min = i;
+            for(unsigned int j = i; j < vetor.size(); j++){
+                if(vetor[j].weight < vetor[min].weight){
+                    min = j;
+                }
+            }
+            Edge tmp = vetor[i];
+            vetor[i] = vetor[min];
+            vetor[min] = tmp;
+        }
+}
 
 template <typename T>
 WeightedGraphAL<T>::WeightedGraphAL(unsigned int num_vertices) : num_vertices(num_vertices)
@@ -313,10 +303,10 @@ int main()
     input_WeightedGraphAL(g, num_edges);
     //display_WeightedGraphAL(g);
     //g.get_edges();
-    UnionFind<VertexWeightPair> uf(num_vertices);
+    UnionFind uf(num_vertices);
     vector<Edge> result = uf.Kruskal(g);
     for (auto item : result) {
-        cout << "(" << item.vertex1 << " , " << item.vertex2 << " , " << item.weight << " ) " << endl;
+      cout << "(" << item.vertex1 << " , " << item.vertex2 << " , " << item.weight << " ) " << endl;
     }
     return 0;
 }
