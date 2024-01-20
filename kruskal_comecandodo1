@@ -74,7 +74,7 @@ public:
     UnionFind(int N) : id(N){}
     void makeSet(WeightedGraphAL<VertexWeightPair> &g) 
     {
-        for(unsigned int i = 0; i < g.get_num_vertices(); i++){
+        for(unsigned int i = 1; i <= g.get_num_vertices(); i++){
             id[i] = i;  //todo identificador do conjunto no início é ele mesmo
         }
     }
@@ -93,7 +93,7 @@ public:
         {
             return; // ja estao no mesmo componente
         }
-        for (unsigned int i = 0; i < id.size(); i++)
+        for (unsigned int i = 1; i <= id.size(); i++)
         {
             if (id[i] == pID)
             {
@@ -131,12 +131,12 @@ void selectionSort(vector<Edge> &vetor){
             vetor[min] = tmp;
         }
 }
-
 template <typename T>
 WeightedGraphAL<T>::WeightedGraphAL(unsigned int num_vertices) : num_vertices(num_vertices)
 {
     adj = new list<VertexWeightPair>[num_vertices];
 }
+
 template <typename T>
 WeightedGraphAL<T>::~WeightedGraphAL()
 {
@@ -159,20 +159,18 @@ void WeightedGraphAL<T>::add_edge(Vertex u, Vertex v, Weight weight)
     int flag3 = 0, flag4 = 0;
     if (vertex_already_exists(u, v) == false)
     {
-        adj[u].push_back(item_Vertex_v);
+        adj[u - 1].push_back(item_Vertex_v);
         flag3 = 1;
     }
     if (vertex_already_exists(v, u) == false)
     {
-        adj[v].push_back(item_Vertex_u);
+        adj[v - 1].push_back(item_Vertex_u);
         flag4 = 1;
     }
-
     if(flag3 == 1 && flag4 == 1){
         Edge uv{u, v, weight};
         edges.push_back(uv);
     }
-
     for (auto itr = vertices.begin(); itr != vertices.end(); ++itr)
     {
         if (itr->vertex == item_Vertex_v.vertex)
@@ -200,7 +198,7 @@ bool WeightedGraphAL<T>::vertex_already_exists(Vertex u, Vertex v)
 {
     VertexWeightPair item_Vertex_u{u};
     VertexWeightPair item_Vertex_v{v};
-    list<VertexWeightPair> &lista_u = adj[u];
+    list<VertexWeightPair> &lista_u = adj[u - 1];
     for (auto itr = lista_u.begin(); itr != lista_u.end(); ++itr)
     {
         if (itr->vertex == item_Vertex_v.vertex)
@@ -216,7 +214,7 @@ void WeightedGraphAL<T>::remove_edge(Vertex u, Vertex v)
 {
     VertexWeightPair item_Vertex_v{v};
     VertexWeightPair item_Vertex_u{u};
-    list<VertexWeightPair> &lista_u = adj[u];
+    list<VertexWeightPair> &lista_u = adj[u - 1];
     for (auto itr = lista_u.begin(); itr != lista_u.end(); ++itr)
     {
         if (itr->vertex == item_Vertex_v.vertex)
@@ -224,7 +222,7 @@ void WeightedGraphAL<T>::remove_edge(Vertex u, Vertex v)
             itr = lista_u.erase(itr);
         }
     }
-    list<VertexWeightPair> &lista_v = adj[v];
+    list<VertexWeightPair> &lista_v = adj[v - 1];
     for (auto itr2 = lista_v.begin(); itr2 != lista_v.end(); ++itr2)
     {
         if (itr2->vertex == item_Vertex_u.vertex)
@@ -270,9 +268,10 @@ void input_WeightedGraphAL(WeightedGraphAL<T> &g, unsigned int num_edges)
     for (unsigned int i = 0; i < num_edges; ++i)
     {
         cin >> u >> v >> weight;
-        g.add_edge(u, v, weight);   
+        g.add_edge(u, v, weight);
     }
 }
+
 template <typename T>
 void display_list(list<T> &lst)
 {
@@ -286,13 +285,14 @@ void display_list(list<T> &lst)
 template <typename T>
 void display_WeightedGraphAL(WeightedGraphAL<T> &g)
 {
-    for (unsigned int v = 0; v < g.get_num_vertices(); v++)
+    for (unsigned int v = 1; v <= g.get_num_vertices(); v++)
     {
         cout << v << ": ";
         list<T> lst = g.get_adj(v);
         display_list(lst);
     }
 }
+
 int main()
 {
     unsigned int num_vertices = 0;
@@ -307,5 +307,4 @@ int main()
     for (auto item : result) {
       cout << "(" << item.vertex1 << " , " << item.vertex2 << " , " << item.weight << " ) " << endl;
     }
-    return 0;
 }
