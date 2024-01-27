@@ -146,10 +146,10 @@ int main()
     unsigned int num_vertices = 0;
     unsigned int num_edges = 0;
     cin >> num_vertices >> num_edges;
-    cout << "num_vertices: " << num_vertices << endl;
-    cout << "num_edges: " << num_edges << endl;
     GraphAL<ItemVertex> g{num_vertices};
     input_GraphAL(g, num_edges);
+    cout << "num_vertices: " << num_vertices << endl;
+    cout << "num_edges: " << num_edges << endl;
     display_GraphAL(g);
     return 0;
 }

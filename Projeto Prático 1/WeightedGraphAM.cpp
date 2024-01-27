@@ -1,12 +1,10 @@
 #include <iostream>
-#include <cstdlib> 
+#include <cstdlib> // atoi
 #include <vector>
 #include <list>
-#include <iomanip> 
+#include <iomanip> // setw
 #include <limits>
 using namespace std;
-
-//implementação de um grafo ponderado utilizando matriz de adjacência
 
 const float inf = std::numeric_limits<float>::infinity();
 
@@ -86,7 +84,7 @@ WeightedGraphAM<T>::~WeightedGraphAM()
 template <typename T>
 void WeightedGraphAM<T>::add_edge(unsigned int u, unsigned int v, T weight)
 {
-    if (adj[u][v].weight == inf)
+    if (adj[u][v].weight == inf && adj[v][u].weight == inf)
     {
         Edge<T> edge{weight};
         adj[u][v] = edge;
@@ -125,7 +123,7 @@ void display_matadj_graph(WeightedGraphAM<T> &g)
         cout << std::setw(k) << g.get_weight_edge(i, 0) << " ";
         for (unsigned int j = 1; j < g.get_num_vertices(); j++)
         {
-            cout << std::setw(k + 2) << g.get_weight_edge(i, j) << " ";
+            cout << g.get_weight_edge(i, j) << " ";
         }
         cout << endl;
     }
@@ -139,9 +137,6 @@ int main()
     cin >> num_vertices;
     cin >> num_edges;
 
-    cout << "num_vertices: " << num_vertices << endl;
-    cout << "num_edges: " << num_edges << endl;
-
     WeightedGraphAM<float> g{num_vertices};
 
     unsigned int u = 0;
@@ -154,6 +149,8 @@ int main()
         cin >> u >> v >> weight;
         g.add_edge(u, v, weight);
     }
+    cout << "num_vertices: " << g.get_num_vertices() << endl;
+    cout << "num_edges: " << g.get_num_edges() << endl;
 
     display_matadj_graph(g);
 

@@ -300,7 +300,7 @@ int main()
     cin >> num_vertices >> num_edges;
     WeightedGraphAL<VertexWeightPair> g{num_vertices};
     input_WeightedGraphAL(g, num_edges);
-    //display_WeightedGraphAL(g);
+    display_WeightedGraphAL(g);
     //g.get_edges();
     UnionFind uf(num_vertices);
     vector<Edge> result = uf.Kruskal(g);

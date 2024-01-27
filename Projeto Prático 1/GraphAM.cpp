@@ -138,9 +138,6 @@ int main()
     cin >> num_vertices;
     cin >> num_edges;
 
-    cout << "num_vertices: " << num_vertices << endl;
-    cout << "num_edges: " << num_edges << endl;
-
     GraphAM<Weight> g{num_vertices};
 
     for (unsigned int i = 0; i < num_edges; ++i)
@@ -149,7 +146,8 @@ int main()
         cin >> u >> v;
         g.add_edge(u, v);
     }
-
+    cout << "num_vertices: " << num_vertices << endl;
+    cout << "num_edges: " << num_edges << endl;
     display_matadj_graph(g);
 	
     return 0;

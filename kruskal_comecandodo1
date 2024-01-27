@@ -295,16 +295,26 @@ void display_WeightedGraphAL(WeightedGraphAL<T> &g)
 
 int main()
 {
-    unsigned int num_vertices = 0;
-    unsigned int num_edges = 0;
-    cin >> num_vertices >> num_edges;
-    WeightedGraphAL<VertexWeightPair> g{num_vertices};
-    input_WeightedGraphAL(g, num_edges);
+    //unsigned int num_vertices = 0;
+    //unsigned int num_edges = 0;
+    //cin >> num_vertices >> num_edges;
+    //WeightedGraphAL<VertexWeightPair> g{num_vertices};
+    //input_WeightedGraphAL(g, num_edges);
     //display_WeightedGraphAL(g);
     //g.get_edges();
-    UnionFind uf(num_vertices);
-    vector<Edge> result = uf.Kruskal(g);
-    for (auto item : result) {
-      cout << "(" << item.vertex1 << " , " << item.vertex2 << " , " << item.weight << " ) " << endl;
+    //UnionFind uf(num_vertices);
+    //vector<Edge> result = uf.Kruskal(g);
+    //for (auto item : result) {
+    //  cout << "(" << item.vertex1 << " , " << item.vertex2 << " , " << item.weight << " ) " << endl;
+    //}
+    int neurons;
+    vector<int> sickNeurons;
+    while (cin >> neurons) {
+        sickNeurons.push_back(neurons);
     }
+    for (int i : numbers) {
+        std::cout << i << " ";
+    }
+    std::cout << std::endl;
+    return 0;
 }
