@@ -146,8 +146,8 @@ int main()
         cin >> u >> v;
         g.add_edge(u, v);
     }
-    cout << "num_vertices: " << num_vertices << endl;
-    cout << "num_edges: " << num_edges << endl;
+    cout << "num_vertices: " << g.get_num_vertices() << endl;
+    cout << "num_edges: " << g.get_num_edges() << endl;
     display_matadj_graph(g);
 	
     return 0;

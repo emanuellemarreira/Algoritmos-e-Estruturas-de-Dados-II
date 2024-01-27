@@ -29,7 +29,7 @@ private:
 public:
     DigraphAM(unsigned int);
     ~DigraphAM();
-    int add_edge(Vertex, Vertex);
+    void add_edge(Vertex, Vertex);
     list<Vertex> get_adj(Vertex);
     T get_weight_edge(Vertex, Vertex);
     void remove_edge(Vertex, Vertex);
@@ -82,16 +82,14 @@ DigraphAM<T>::~DigraphAM()
 }
 
 template <typename T>
-int DigraphAM<T>::add_edge(Vertex u, Vertex v)
+void DigraphAM<T>::add_edge(Vertex u, Vertex v)
 {
     if (adj[u][v].weight == 0)
     {
         Edge<T> edge{1};
         adj[u][v] = edge;
         num_edges++;
-        return 0;
     }
-    return -1;
 }
 
 template <typename T>
@@ -117,8 +115,6 @@ T DigraphAM<T>::get_weight_edge(Vertex u, Vertex v)
 template <typename T>
 void display_matadj_graph(DigraphAM<T> &g)
 {
-    int k = 0;
-
     for (unsigned int i = 0; i < g.get_num_vertices(); i++)
     {
         cout << g.get_weight_edge(i, 0) << " ";
@@ -145,10 +141,10 @@ int main(int argc, char const *argv[])
     {
         Vertex u, v;
         cin >> u >> v;
-        num_edges += g.add_edge(u, v);
+        g.add_edge(u, v);
     }
-    cout << "num_vertices: " << num_vertices << endl;
-    cout << "num_edges: " << num_edges << endl;
+    cout << "num_vertices: " << g.get_num_vertices() << endl;
+    cout << "num_edges: " << g.get_num_edges() << endl;
     display_matadj_graph(g);
 
     return 0;

@@ -39,7 +39,7 @@ public:
 };
 
 template <typename T>
-WeightedDigraphAL<T>::WeightedDigraphAL(unsigned int num_vertices) : num_vertices(num_vertices)
+WeightedDigraphAL<T>::WeightedDigraphAL(unsigned int num_vertices) : num_vertices(num_vertices), num_edges(0)
 {
     adj = new list<VertexWeightPair>[num_vertices];
 }
@@ -64,8 +64,8 @@ void WeightedDigraphAL<T>::add_edge(Vertex u, Vertex v, Weight weight)
     if (vertex_already_exists(u, v) == false)
     {
         adj[u].push_back(item_Vertex_v);
+        num_edges++;
     }
-    num_edges++;
 }
 
 template <typename T>
@@ -139,8 +139,8 @@ int main()
     cin >> num_vertices >> num_edges;
     WeightedDigraphAL<VertexWeightPair> g{num_vertices};
     input_WeightedGraphAL(g, num_edges);
-    cout << "num_vertices: " << num_vertices << endl;
-    cout << "num_edges: " << num_edges << endl;
+    cout << "num_vertices: " << g.get_num_vertices() << endl;
+    cout << "num_edges: " << g.get_num_edges() << endl;
     display_WeightedGraphAL(g);
     return 0;
 }

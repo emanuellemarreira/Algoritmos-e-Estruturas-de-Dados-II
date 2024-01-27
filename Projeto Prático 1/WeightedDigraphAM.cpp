@@ -29,7 +29,7 @@ private:
 public:
     WeightedDigraphAM(unsigned int);
     ~WeightedDigraphAM();
-    int add_edge(unsigned int, unsigned int, T);
+    void add_edge(unsigned int, unsigned int, T);
     list<unsigned int> get_adj(unsigned int);
     T get_weight_edge(unsigned int, unsigned int);
     void remove_edge(unsigned int, unsigned int);
@@ -82,16 +82,14 @@ WeightedDigraphAM<T>::~WeightedDigraphAM()
 }
 
 template <typename T>
-int WeightedDigraphAM<T>::add_edge(unsigned int u, unsigned int v, T weight)
+void WeightedDigraphAM<T>::add_edge(unsigned int u, unsigned int v, T weight)
 {
     if (adj[u][v].weight == inf)
     {
         Edge<T> edge{weight};
         adj[u][v] = edge;
         num_edges++;
-        return 0;
     }
-    return -1;
 }
 
 template <typename T>
@@ -117,8 +115,6 @@ T WeightedDigraphAM<T>::get_weight_edge(unsigned int u, unsigned int v)
 template <typename T>
 void display_matadj_graph(WeightedDigraphAM<T> &g)
 {
-    int k = 0;
-
     for (unsigned int i = 0; i < g.get_num_vertices(); i++)
     {
         cout << g.get_weight_edge(i, 0) << " ";
@@ -148,11 +144,11 @@ int main()
     for (unsigned int i = 0; i < num_edges; ++i)
     {
         cin >> u >> v >> weight;
-        num_edges += g.add_edge(u, v, weight);
+        g.add_edge(u, v, weight);
     }
     
-    cout << "num_vertices: " << num_vertices << endl;
-    cout << "num_edges: " << num_edges << endl;
+    cout << "num_vertices: " << g.get_num_vertices() << endl;
+    cout << "num_edges: " << g.get_num_edges() << endl;
 
 
     display_matadj_graph(g);

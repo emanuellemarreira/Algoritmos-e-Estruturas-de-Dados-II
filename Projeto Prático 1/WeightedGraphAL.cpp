@@ -39,7 +39,7 @@ public:
 };
 
 template <typename T>
-WeightedGraphAL<T>::WeightedGraphAL(unsigned int num_vertices) : num_vertices(num_vertices)
+WeightedGraphAL<T>::WeightedGraphAL(unsigned int num_vertices) : num_vertices(num_vertices), num_edges(0)
 {
     adj = new list<VertexWeightPair>[num_vertices];
 }
@@ -150,8 +150,8 @@ int main()
     cin >> num_vertices >> num_edges;
     WeightedGraphAL<VertexWeightPair> g{num_vertices};
     input_WeightedGraphAL(g, num_edges);
-    cout << "num_vertices: " << num_vertices << endl;
-    cout << "num_edges: " << num_edges << endl;
+    cout << "num_vertices: " << g.get_num_vertices() << endl;
+    cout << "num_edges: " << g.get_num_edges() << endl;
     display_WeightedGraphAL(g);
     return 0;
 }
