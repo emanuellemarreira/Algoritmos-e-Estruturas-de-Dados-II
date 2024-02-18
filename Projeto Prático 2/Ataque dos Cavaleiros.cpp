@@ -3,11 +3,6 @@
 #include <list>
 #include <limits>
 
-// implementação do algoritmo BFS(busca em largura em grafos)
-// problema: em um tabuleiro de xadrez com 4 cavalos e 1 rei
-// encontrar a menor quantidade de movimentos de um cavalo
-// até alcançar o rei.
-
 const float inf = std::numeric_limits<float>::infinity();
 
 using namespace std;
@@ -18,7 +13,7 @@ public:
     int index;
     char col;
     int row;
-    int cor; // 0 branco 1 cinza 2 preto
+    int cor;
     float d;
     Vertex *pi;
 
@@ -34,7 +29,7 @@ public:
 
     Graph(unsigned int size) : adjacencyList(size) {}
 
-    void addEdge(const Vertex &u, const Vertex &v);
+    void addEdge(Vertex &u, Vertex &v);
 };
 
 template <typename T>
@@ -48,19 +43,15 @@ public:
     void enqueue(T item) { list.push_back(item); }
     T dequeue()
     {
-        if (!list.empty())
-        {
-            T front = list.front();
-            list.pop_front();
-            return front;
-        }
+        T front = list.front();
+        list.pop_front();
+        return front;
     }
     bool isEmpty() { return list.empty(); }
 };
 
-
 template <typename T>
-void Graph<T>::addEdge(const Vertex &u, const Vertex &v)
+void Graph<T>::addEdge(Vertex &u, Vertex &v)
 {
     adjacencyList[u.index].push_back(v);
 }
@@ -131,7 +122,7 @@ float BFS(Graph<T> &graph, Vertex s, Vertex king)
                 v.d = u.d + 1;
                 v.pi = &u;
                 queue.enqueue(v);
-                for (const Vertex &adjKing : graph.adjacencyList[king.index])
+                for (Vertex &adjKing : graph.adjacencyList[king.index])
                 {
                     if (v.index == adjKing.index)
                     {
@@ -145,7 +136,7 @@ float BFS(Graph<T> &graph, Vertex s, Vertex king)
     return 0;
 }
 
-int getindex(const char letter, const char number)
+int getIndex(char letter, char number)
 {
     int col = letter - 32;
     int row = number - '0';
@@ -155,52 +146,57 @@ int getindex(const char letter, const char number)
 
 int main()
 {
-    Graph<Vertex> Tabuleiro(65);
+    Graph<Vertex> Board(65);
 
-    createKnightGraph(Tabuleiro);
+    createKnightGraph(Board);
 
-    int iteracoes;
-    cin >> iteracoes;
+    int iterations;
+    cin >> iterations;
 
-    char entrada[20];
-    float menores_caminhos[64];
-    int cont_menores_caminhos = 0;
+    char input[20];
+    vector<float> vectorShortestPaths;
+    vector<vector<float>> allShortestPaths;
 
-    for (int i = 0; i < iteracoes; i++)
+    for (int i = 0; i < iterations; i++)
     {
-        int cont = 1;
-        int menor_caminho = 64;
+        int countShortestPath = 1;
+        int shortestPath = 64;
         for (int i = 0; i < 10; i++)
         {
-            cin >> entrada[i];
+            cin >> input[i];
         }
         for (int i = 0; i < 8; i += 2)
         {
-            int Cavalo = getindex(entrada[i], entrada[i + 1]);
-            int Rei = getindex(entrada[8], entrada[9]);
+            int Knight = getIndex(input[i], input[i + 1]);
+            int King = getIndex(input[8], input[9]);
 
-            Vertex cavalo(Cavalo);
-            Vertex rei(Rei);
-            float movimentos = BFS(Tabuleiro, cavalo, rei);
-            if (movimentos < menor_caminho)
+            Vertex knight(Knight);
+            Vertex king(King);
+            float movements = BFS(Board, knight, king);
+            if (movements < shortestPath)
             {
-                menor_caminho = movimentos;
-                cont = 1;
+                shortestPath = movements;
+                countShortestPath = 1;
             }
-            if (movimentos == menor_caminho){
-                cont += 1;
+            if (movements == shortestPath)
+            {
+                countShortestPath += 1;
             }
         }
-        for (int i = 1; i < cont; i += 1)
+        for (int i = 1; i < countShortestPath; i += 1)
         {
-            menores_caminhos[cont_menores_caminhos] = menor_caminho;
-            cont_menores_caminhos++;
+            vectorShortestPaths.push_back(shortestPath);
         }
+        allShortestPaths.push_back(vectorShortestPaths);
+        vectorShortestPaths.clear();
     }
-    for (int i = 0; i < cont_menores_caminhos; i++)
+    for (auto &caminhos : allShortestPaths)
     {
-        cout << menores_caminhos[i];
+        for (float caminho : caminhos)
+        {
+            cout << caminho << " ";
+        }
+        cout << endl;
     }
-
     return 0;
 }
