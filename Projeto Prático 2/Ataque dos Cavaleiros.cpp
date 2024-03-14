@@ -194,9 +194,8 @@ int main()
     {
         for (float caminho : caminhos)
         {
-            cout << caminho << " ";
+            cout << caminho;
         }
-        cout << endl;
     }
     return 0;
 }
